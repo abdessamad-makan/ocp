@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Map</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-places.js"></script>
+    <style>
+        #map {
+            height: 400px;  /* Adjusted height */
+            width: 100%;  /* Full width */
+        }
+        .leaflet-control-zoom {
+            font-size: 16px;  /* Adjust zoom control size */
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        var platform = new H.service.Platform({
+            'apikey': 'YOUR_HERE_API_KEY'
+        });
+        var defaultLayers = platform.createDefaultLayers();
+        var map = new H.Map(
+            document.getElementById('map'),
+            defaultLayers.vector.normal.map,
+            {
+                zoom: 14,
+                center: { lat: 52.5, lng: 13.4 }
+            }
+        );
+
+        var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+        var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+        // Add a marker to the map
+        var marker = new H.map.Marker({ lat: 52.5, lng: 13.4 });
+        map.addObject(marker);
+
+        // Function to set the map location and add marker
+        function setMapLocation(lat, lng) {
+            map.setCenter({ lat: lat, lng: lng });
+            map.setZoom(14);
+            marker.setGeometry({ lat: lat, lng: lng });
+        }
+
+        // Expose the setMapLocation function to the global scope
+        window.setMapLocation = setMapLocation;
+    </script>
+</body>
+</html>
